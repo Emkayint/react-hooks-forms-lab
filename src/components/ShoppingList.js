@@ -14,26 +14,33 @@ function ShoppingList({ items, onItemFormSubmit }) {
     e.preventDefault()
     setSearchFilter(e.target.value)
   }
-  const itemsToDisplay = items.filter((item) => {
-    if (selectedCategory === "All") return true;
+  const itemsToDisplay = items
+    .filter(
+      (item) => selectedCategory === "All" || item.category === selectedCategory
+    )
+    .filter((item) => item.name.toLowerCase().includes(search.toLowerCase()));
+  // const itemsToDisplay = items.filter((item) => {
+  //   if (selectedCategory === "All") return true;
 
-    return item.category === selectedCategory;
-  });
+  //   return item.category === selectedCategory;
+  // });
 
-  const filteredItems = itemsToDisplay.filter(item => {
-    if(search === ''){
-      return true
-    } else {
-      return item.name.toLowerCase().search(search) >= 0
-    }
-  })
+  
+
+  // const filteredItems = itemsToDisplay.filter(item => {
+  //   if(search === ''){
+  //     return true
+  //   } else {
+  //     return item.name.toLowerCase().search(search) >= 0
+  //   }
+  // })
 
   return (
     <div className="ShoppingList">
       <ItemForm  onItemFormSubmit = {onItemFormSubmit}/>
       <Filter onCategoryChange={handleCategoryChange} onSearchChange = {onSearchFilter} search = {search}/>
       <ul className="Items">
-        {filteredItems.map((item) => (
+        {itemsToDisplay.map((item) => (
           <Item key={item.id} name={item.name} category={item.category} />
         ))}
       </ul>
